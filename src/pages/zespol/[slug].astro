@@ -1,0 +1,116 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { teamMembers } from '../../data/team';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return teamMembers.map((member) => ({
+    params: { slug: member.slug },
+    props: { member },
+  }));
+};
+
+const { member } = Astro.props as { member: import('../../data/team').TeamMember };
+---
+
+<Layout
+  title={`${member.name} — ${member.role}`}
+  description={`${member.name} — ${member.role}. Chrześcijańska Poradnia Droga, Kraków.`}
+  image={member.photo}
+>
+  <section class="pt-8 pb-20">
+    <div class="max-w-[1200px] mx-auto px-6">
+
+      <!-- Back -->
+      <a href="/#zespol" class="reveal inline-flex items-center gap-1 text-[0.82rem] font-medium text-muted mb-4 hover:text-gold-dark transition-colors duration-150">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        Wróć do zespołu
+      </a>
+
+      <!-- Header card -->
+      <div class="reveal flex items-center gap-10 p-10 bg-cream-warm rounded-[28px] mb-12 max-md:flex-col max-md:text-center max-md:p-8">
+        <div class="relative w-[160px] h-[160px] shrink-0 max-md:w-[130px] max-md:h-[130px]">
+          <img src={member.photo} alt={member.name} class="w-full h-full object-cover rounded-full" />
+          <div class="absolute -inset-[5px] rounded-full border-2 border-gold-light"></div>
+        </div>
+        <div>
+          <h1 class="mb-1 text-[clamp(1.6rem,3.5vw,2.2rem)]">{member.name}</h1>
+          <p class="text-muted text-[0.95rem] mb-4">{member.role}</p>
+          {member.isCollaborator && (
+            <span class="inline-block px-3 py-1 bg-accent text-white rounded-xl text-[0.68rem] font-semibold uppercase tracking-wider mb-4">
+              Współpracujący
+            </span>
+          )}
+          <div class="flex gap-3 flex-wrap max-md:justify-center">
+            <a href={`tel:+48${member.phone.replace(/\s/g, '')}`} class="inline-flex items-center gap-2 py-2 px-4 bg-white border border-border rounded-xl text-[0.82rem] text-charcoal no-underline hover:border-gold-light hover:bg-gold-glow transition-all duration-150">
+              <svg class="text-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              {member.phone}
+            </a>
+            <a href={`mailto:${member.email}`} class="inline-flex items-center gap-2 py-2 px-4 bg-white border border-border rounded-xl text-[0.82rem] text-charcoal no-underline hover:border-gold-light hover:bg-gold-glow transition-all duration-150">
+              <svg class="text-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              {member.email}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="max-w-[680px] mx-auto">
+        <div class="reveal mb-10">
+          <h2 class="text-[1.2rem] mb-5 pb-3 border-b-[1.5px] border-cream-dark">Specjalizacja</h2>
+          <div class="flex flex-wrap gap-2">
+            {member.specializations.map((s) => (
+              <span class="py-2 px-4 bg-cream-warm border border-border rounded-xl text-[0.82rem] text-slate-custom leading-snug">{s}</span>
+            ))}
+          </div>
+        </div>
+
+        {member.experience.length > 0 && (
+          <div class="reveal mb-10">
+            <h2 class="text-[1.2rem] mb-5 pb-3 border-b-[1.5px] border-cream-dark">Doświadczenie</h2>
+            <ul class="list-none p-0">
+              {member.experience.map((e) => (
+                <li class="relative pl-8 py-3 text-[0.92rem] text-slate-custom leading-relaxed border-b border-cream-dark last:border-b-0 before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-[6px] before:rounded-full before:border-[1.5px] before:border-gold before:bg-gold-glow">
+                  {e}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {member.education.length > 0 && (
+          <div class="reveal mb-10">
+            <h2 class="text-[1.2rem] mb-5 pb-3 border-b-[1.5px] border-cream-dark">Wykształcenie</h2>
+            <ul class="list-none p-0">
+              {member.education.map((e) => (
+                <li class="relative pl-8 py-3 text-[0.92rem] text-slate-custom leading-relaxed border-b border-cream-dark last:border-b-0 before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-[6px] before:rounded-full before:border-[1.5px] before:border-gold before:bg-gold-glow">
+                  {e}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {member.personal && (
+          <div class="reveal mb-10">
+            <h2 class="text-[1.2rem] mb-5 pb-3 border-b-[1.5px] border-cream-dark">Zainteresowania</h2>
+            <p class="text-slate-custom italic leading-7 text-[0.95rem]">{member.personal}</p>
+          </div>
+        )}
+
+        <div class="reveal text-center p-10 bg-cream-warm rounded-2xl mt-8">
+          <h3 class="mb-5">Chcesz umówić wizytę?</h3>
+          <div class="flex gap-3 justify-center flex-wrap">
+            <a href={`tel:+48${member.phone.replace(/\s/g, '')}`} class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[0.85rem] bg-gold text-charcoal hover:bg-gold-light transition-all duration-300">
+              Zadzwoń: {member.phone}
+            </a>
+            <a href={`mailto:${member.email}`} class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-[0.85rem] border border-border text-charcoal hover:border-gold-light transition-all duration-300">
+              Napisz e-mail
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Layout>
