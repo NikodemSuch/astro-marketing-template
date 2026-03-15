@@ -1,85 +1,175 @@
 ---
-import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/';
+
+const navLinks = [
+  { href: '/#o-nas', label: 'O nas' },
+  { href: '/#zespol', label: 'Zespół' },
+  { href: '/#kontakt', label: 'Kontakt' },
+];
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-		<div class="social-links">
-			<a href="https://m.webtoo.ls/@astro" target="_blank">
-				<span class="sr-only">Follow Astro on Mastodon</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
-					></path></svg
-				>
-			</a>
-			<a href="https://twitter.com/astrodotbuild" target="_blank">
-				<span class="sr-only">Follow Astro on Twitter</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
-					></path></svg
-				>
-			</a>
-			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
-			</a>
-		</div>
-	</nav>
-</header>
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
+<header
+  id="site-header"
+  class:list={[
+    'group/header top-0 z-50 transition-all duration-300',
+    isHome
+      ? 'fixed w-full bg-transparent border-b border-transparent'
+      : 'sticky bg-cream border-b border-border',
+  ]}
+>
+  <nav class="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-[72px]">
+    <a href="/" aria-label="Strona główna" class="group relative z-[110]">
+      <img
+        id="nav-logo"
+        src="/images/logo.png"
+        alt={SITE_TITLE}
+        class:list={[
+          'h-[42px] w-auto transition-all duration-300',
+          isHome ? 'brightness-[10] group-data-[scrolled=true]/header:brightness-100' : '',
+        ]}
+      />
+    </a>
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
-	}
+    <button
+      id="nav-toggle"
+      class="hidden max-md:block bg-transparent border-none cursor-pointer w-8 h-8 relative z-[110]"
+      aria-label="Menu"
+      aria-expanded="false"
+    >
+      <span id="bar1" class:list={[
+        'block w-[22px] h-[1.5px] absolute left-[5px] top-[11px] transition-all duration-300',
+        isHome ? 'bg-white group-data-[scrolled=true]/header:bg-charcoal' : 'bg-charcoal',
+      ]}></span>
+      <span id="bar2" class:list={[
+        'block w-[22px] h-[1.5px] absolute left-[5px] top-[19px] transition-all duration-300',
+        isHome ? 'bg-white group-data-[scrolled=true]/header:bg-charcoal' : 'bg-charcoal',
+      ]}></span>
+    </button>
+
+    <ul id="nav-links" class="flex list-none gap-0 max-md:absolute max-md:top-full max-md:left-0 max-md:right-0 max-md:flex-col max-md:px-2 max-md:pt-4 max-md:pb-6 max-md:bg-cream max-md:border-b max-md:border-border max-md:shadow-sm max-md:opacity-0 max-md:pointer-events-none max-md:transition-all max-md:duration-300 max-md:-translate-y-2 z-[100]">
+      {navLinks.map(({ href, label }) => (
+        <li class="max-md:border-b max-md:border-border max-md:last:border-none">
+          <a
+            href={href}
+            class:list={[
+              'nav-link relative block px-4 py-2 max-md:py-4 max-md:px-6 text-[0.88rem] font-medium transition-all duration-150',
+              'md:rounded-full', // only rounded on desktop
+              isHome
+                ? 'md:text-white md:hover:bg-white/12 md:hover:text-white md:nav-text-shadow group-data-[scrolled=true]/header:md:text-charcoal group-data-[scrolled=true]/header:md:hover:text-gold-dark group-data-[scrolled=true]/header:md:![text-shadow:none]'
+                : 'md:text-charcoal md:hover:text-gold-dark',
+              // Force mobile styles (overriding the transparency/white text of home page header when open)
+              'max-md:!text-charcoal max-md:hover:!text-gold-dark max-md:data-[active=true]:!text-gold-dark max-md:!bg-transparent max-md:![text-shadow:none]',
+              // Active State Underline (Desktop only via md:...)
+              'md:after:content-[\'\'] md:after:absolute md:after:bottom-1.5 md:after:left-4 md:after:right-4 md:after:h-[2px] md:after:bg-gold md:after:rounded-full md:after:opacity-0 md:after:transition-opacity md:after:duration-300 md:data-[active=true]:after:opacity-100',
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('nav-links');
+  const header = document.getElementById('site-header');
+  const logo = document.getElementById('nav-logo');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const isHome = header?.classList.contains('fixed');
+
+  toggle?.addEventListener('click', () => {
+    const open = links?.classList.toggle('!opacity-100');
+    links?.classList.toggle('!pointer-events-auto');
+    links?.classList.toggle('!translate-y-0');
+    document.body.classList.toggle('overflow-hidden');
+    
+    if (open) {
+      bar1!.style.transform = 'rotate(45deg)';
+      bar1!.style.top = '15px';
+      bar2!.style.transform = 'rotate(-45deg)';
+      bar2!.style.top = '15px';
+    } else {
+      bar1!.style.transform = '';
+      bar1!.style.top = '11px';
+      bar2!.style.transform = '';
+      bar2!.style.top = '19px';
+    }
+    toggle.setAttribute('aria-expanded', String(!!open));
+  });
+
+  links?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      links.classList.remove('!opacity-100', '!pointer-events-auto', '!translate-y-0');
+      document.body.classList.remove('overflow-hidden');
+      bar1!.style.transform = '';
+      bar1!.style.top = '11px';
+      bar2!.style.transform = '';
+      bar2!.style.top = '19px';
+      toggle?.setAttribute('aria-expanded', 'false');
+    })
+  );
+
+  if (isHome) {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 60;
+      if (scrolled) {
+        header?.classList.add('!bg-cream/92', 'backdrop-blur-md', '!border-border', 'shadow-sm');
+        header?.setAttribute('data-scrolled', 'true');
+      } else {
+        header?.classList.remove('!bg-cream/92', 'backdrop-blur-md', '!border-border', 'shadow-sm');
+        header?.setAttribute('data-scrolled', 'false');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // Scrollspy logic
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-link');
+
+  const spyScroll = () => {
+    let current = '';
+    const scrollY = window.scrollY;
+
+    sections.forEach((section) => {
+      const el = section as HTMLElement;
+      const sectionTop = el.offsetTop - 150;
+
+      if (scrollY >= sectionTop) {
+        current = el.getAttribute('id') || '';
+      }
+    });
+
+    // Handle bottom of page edge-case for the last section (usually contact)
+    if (window.innerHeight + Math.round(scrollY) >= document.body.offsetHeight - 50) {
+      if (sections.length > 0) {
+        current = sections[sections.length - 1].getAttribute('id') || '';
+      }
+    }
+
+    navItems.forEach((link) => {
+      link.removeAttribute('data-active');
+      if (current && link.getAttribute('href') === `/#${current}`) {
+        link.setAttribute('data-active', 'true');
+      }
+    });
+  };
+
+  if (navItems.length > 0 && sections.length > 0) {
+    window.addEventListener('scroll', spyScroll, { passive: true });
+    setTimeout(spyScroll, 100);
+  }
+</script>
+
+<style>
+  .nav-text-shadow {
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.15);
+  }
 </style>
